@@ -1,6 +1,17 @@
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
@@ -9,8 +20,8 @@ def read_root():
 @app.get("/api/ip")
 async def read_root(request: Request):
     client_ip = request.client.host
-    return {"client_ip": client_ip}
+    return {"ip": client_ip}
 
-@app.get("/items/{id}")
+@app.get("/items/{item_id}")
 def read_item(item_id: int, q: str = None):
-    return {"id": id, "q": q}
+    return {"id": item_id, "q": q}
